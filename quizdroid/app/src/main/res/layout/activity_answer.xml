@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+    <TextView
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:id="@+id/answerResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Lorem ipsum dolor sit amet"/>
+    <TextView
+        android:id="@+id/yourAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Lorem ipsum dolor sit amet"/>
+    <TextView
+        android:id="@+id/expectedAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Lorem ipsum dolor sit amet"/>
+    <TextView
+        android:id="@+id/totalWrong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:text="0/0 Correct"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/prevQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:padding="5sp"
+            android:text="Go Back" />
+        <Button
+            android:id="@+id/nextQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:padding="5sp"
+            android:text="Next Question" />
+    </LinearLayout>
+
+
+    <!-- You can add more views to customize the layout for SecondActivity as needed -->
+
+</LinearLayout>

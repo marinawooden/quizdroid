@@ -1,0 +1,54 @@
+{
+  "math": {
+    "questions": {
+      "1": {
+        "question": "2 + 2",
+        "answers": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "correctAnswer": "4"
+      },
+      "2": {
+        "question": "2 * 2",
+        "answers": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "correctAnswer": "4"
+      }
+    }
+  },
+  "physics": {
+    "questions": {
+      "1": {
+        "question": "What is mc^2?",
+        "answers": [
+          "e",
+          "x",
+          "y",
+          "z"
+        ],
+        "correctAnswer": "e"
+      }
+    }
+  },
+  "marvel": {
+    "questions": {
+      "1": {
+        "question": "What's the best franchise?",
+        "answers": [
+          "Marvel",
+          "Marvel",
+          "Marvel",
+          "Marvel"
+        ],
+        "correctAnswer": "DC"
+      }
+    }
+  }
+}

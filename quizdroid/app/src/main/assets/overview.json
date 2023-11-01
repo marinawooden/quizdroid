@@ -1,0 +1,17 @@
+{
+  "math": {
+    "title": "Math Questions",
+    "description": "These are some math questions",
+    "totalQs": 2
+  },
+  "physics": {
+    "title": "Physics Questions",
+    "description": "Physics is cool!",
+    "totalQs": 1
+  },
+  "marvel": {
+    "title": "Marvel Questions",
+    "description": "Marvel is a franchise",
+    "totalQs": 1
+  }
+}
