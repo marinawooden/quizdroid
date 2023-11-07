@@ -1,5 +1,6 @@
 package edu.uw.ischool.mwoode.quizdroid
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,36 +9,43 @@ import android.widget.*
 import java.lang.Integer.parseInt
 
 class QuizActivity : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
-        val category = intent.getStringExtra("category");
+        var category = intent.getStringExtra("category");
         val numQuestion = intent.getStringExtra("numQuestion");
         var numWrong = intent.getStringExtra("numWrong");
 
-        val categories = loadCategories(this, "questions.json");
+        // val categories = loadCategories(this, "questions.json");
+        val topicRepository = QuizApp.getInstance().topicRepository
 
         val questionTitle = findViewById<TextView>(R.id.questionTitle);
         val questionText = findViewById<TextView>(R.id.questionDescription);
 
-        val currQuestion = categories
-            .getJSONObject(category)
-            .getJSONObject("questions")
-            .getJSONObject(numQuestion);
+        val currTopic = topicRepository.getTopicByTitle(category as String)
+
+//        Log.i("CAT", currTopic?.questions.toString());
+//        Log.i("CAT", numQuestion as String);
+//        Log.i("CAT", currTopic?.questions?.get((numQuestion as Int) - 1).toString());
+
+        val currQuestion = currTopic?.questions?.get(parseInt(numQuestion) - 1)
+        Log.i("CAT", currQuestion.toString())
+
 
         questionTitle.text = "Question ${numQuestion}";
-        questionText.text = currQuestion.getString("question");
+        questionText.text = currQuestion?.question;
 
         val radioGroup = findViewById<RadioGroup>(R.id.answerGroup)
 
-        for (i in 0 until currQuestion.getJSONArray("answers").length()) {
-            val answer = currQuestion.getJSONArray("answers").getString(i);
+        for (i in 0 until currQuestion?.answers?.size!!) {
+            val answer = currQuestion?.answers?.get(i);
             val radioButton = RadioButton(this);
             radioButton.text = answer;
-            radioButton.tag = answer;
-            // Add the radio button to your layout or view
+            radioButton.tag = i;
 
+            // Add the radio button to your layout or view
             radioGroup.addView(radioButton);
         }
 
@@ -46,21 +54,14 @@ class QuizActivity : AppCompatActivity() {
 
         nextQuestionButton.setOnClickListener {
             val selectedRadioButtonId = radioGroup.checkedRadioButtonId
-            Log.i("INFO", "BUTTON ID IS: " + selectedRadioButtonId );
             // only works if radio button is selected
             if (selectedRadioButtonId != -1) {
                 val selectedOption = findViewById<RadioButton>(selectedRadioButtonId);
 
-                Log.i("QUESTION", currQuestion.getString("correctAnswer"))
-                val isCorrect = currQuestion.getString("correctAnswer") == selectedOption.tag as String;
-                Log.i("QUESTION", isCorrect.toString());
-                val numTotalQuestions = categories
-                    .getJSONObject(category)
-                    .getJSONObject("questions").length();
+                val isCorrect = currQuestion.correctAnswer == (selectedOption.tag as Int);
+                val numTotalQuestions = currTopic.questions.size
 
-                numWrong =  if (isCorrect) { numWrong } else { numWrong + 1 };
-
-                Log.i("INFO", numTotalQuestions.toString())
+                numWrong = if (isCorrect) { numWrong } else { numWrong + 1 };
 
                 if (parseInt(numQuestion) <= numTotalQuestions) {
                     val intent = Intent(this, AnswerActivity::class.java);
@@ -68,8 +69,10 @@ class QuizActivity : AppCompatActivity() {
                     intent.putExtra("numQuestion", numQuestion);
                     intent.putExtra("wasWrong", (!isCorrect).toString());
                     intent.putExtra("numWrong", numWrong);
-                    intent.putExtra("theirAnswer", selectedOption.tag as String);
-                    intent.putExtra("correctAnswer", currQuestion.getString("correctAnswer"));
+                    intent.putExtra("theirAnswer", currQuestion.answers[selectedOption.tag as Int]);
+                    intent.putExtra("correctAnswer",
+                        currQuestion.answers[currQuestion.correctAnswer]
+                    );
                     intent.putExtra("isLastAnswer", (parseInt(numQuestion) == numTotalQuestions).toString());
 
                     startActivity(intent);

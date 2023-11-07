@@ -29,34 +29,5 @@
         android:orientation="vertical"
         android:layout_marginTop="16dp"
         android:id="@+id/radioGroup">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Math"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:tag="math"
-            android:id="@+id/math"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Physics"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:tag="physics"
-            android:id="@+id/physics"/>
-
-        <RadioButton
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="Marvel Super Heroes"
-            android:textSize="16sp"
-            android:tag="marvel"
-            android:id="@+id/marvel"/>
     </RadioGroup>
 </LinearLayout>
