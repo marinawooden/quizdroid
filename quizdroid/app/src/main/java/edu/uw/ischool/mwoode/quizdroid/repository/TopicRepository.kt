@@ -15,6 +15,8 @@ data class Topic(
 interface TopicRepository {
     fun getAllTopics(): List<Topic>
     fun getTopicByTitle(title: String): Topic?
+    fun createTopic(topic: Topic): Topic
+
 }
 
 class InMemoryTopicRepository : TopicRepository {
@@ -43,11 +45,11 @@ class InMemoryTopicRepository : TopicRepository {
             "Marvel Superheroes",
             "Marvel is a franchise",
             listOf(
-                Quiz("What's the best franchise?", listOf("Marvel", "Marvel", "Marvel", "DC"), 4)
+                Quiz("What's the best franchise?", listOf("Marvel", "Marvel", "Marvel", "DC"), 3)
             )
         )
 
-        topics.addAll(listOf(topic1, topic2))
+        topics.addAll(listOf(topic1, topic2, topic3))
     }
 
     override fun getAllTopics(): List<Topic> {
@@ -56,5 +58,10 @@ class InMemoryTopicRepository : TopicRepository {
 
     override fun getTopicByTitle(title: String): Topic? {
         return topics.find { it.title == title }
+    }
+
+    override fun createTopic(topic: Topic): Topic {
+        topics.add(topic)
+        return topic
     }
 }
