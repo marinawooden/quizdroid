@@ -61,6 +61,8 @@ class QuizActivity : AppCompatActivity() {
                 val isCorrect = currQuestion.correctAnswer == (selectedOption.tag as Int);
                 val numTotalQuestions = currTopic.questions.size
 
+//                Log.i("PRBLEM", .toString())
+
                 numWrong = if (isCorrect) { numWrong } else { numWrong + 1 };
 
                 if (parseInt(numQuestion) <= numTotalQuestions) {

@@ -1,4 +1,7 @@
-package edu.uw.ischool.mwoode.quizdroid.repository
+package edu.uw.ischool.mwoode.quizdroid.data
+import android.content.Context
+import org.json.JSONArray
+
 
 data class Quiz(
     val question: String,
@@ -19,37 +22,41 @@ interface TopicRepository {
 
 }
 
-class InMemoryTopicRepository : TopicRepository {
+class InMemoryTopicRepository(private val context: Context) : TopicRepository {
     private val topics: MutableList<Topic> = mutableListOf()
 
     init {
-        // Initialize the repository with some hard-coded data
-        val topic1 = Topic(
-            "Math",
-            "These are some math questions",
-            listOf(
-                Quiz("2 + 2", listOf("1", "2", "3", "4"), 3),
-                Quiz("2 * 2", listOf("4", "5", "6", "7"), 0)
-            )
-        )
+        val jsonString = context.assets.open("questions.json")
+            .bufferedReader()
+            .use { it.readText() }
 
-        val topic2 = Topic(
-            "Physics",
-            "Physics is cool!",
-            listOf(
-                Quiz("What is mc^2", listOf("y", "z", "e", "x"),2),
-            )
-        )
+        val jsonArray = JSONArray(jsonString)
 
-        val topic3 = Topic(
-            "Marvel Superheroes",
-            "Marvel is a franchise",
-            listOf(
-                Quiz("What's the best franchise?", listOf("Marvel", "Marvel", "Marvel", "DC"), 3)
-            )
-        )
+        for (i in 0 until jsonArray.length()) {
+            val topicObject = jsonArray.getJSONObject(i)
+            val title = topicObject.getString("title")
+            val description = topicObject.getString("desc")
+            val questionsArray = topicObject.getJSONArray("questions")
 
-        topics.addAll(listOf(topic1, topic2, topic3))
+            val quizzes = mutableListOf<Quiz>()
+
+            for (j in 0 until questionsArray.length()) {
+                val questionObject = questionsArray.getJSONObject(j)
+                val questionText = questionObject.getString("text")
+                val correctAnswerIndex = questionObject.getString("answer").toInt()
+                val answersArray = questionObject.getJSONArray("answers")
+
+                val answers = mutableListOf<String>()
+                for (k in 0 until answersArray.length()) {
+                    answers.add(answersArray.getString(k))
+                }
+
+                quizzes.add(Quiz(questionText, answers, correctAnswerIndex))
+            }
+
+            val topic = Topic(title, description, quizzes)
+            createTopic(topic)
+        }
     }
 
     override fun getAllTopics(): List<Topic> {
