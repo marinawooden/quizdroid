@@ -1,11 +1,14 @@
 package edu.uw.ischool.mwoode.quizdroid
 
 import android.app.Application
-import edu.uw.ischool.mwoode.quizdroid.repository.*
+import android.util.Log
+import edu.uw.ischool.mwoode.quizdroid.repository.InMemoryTopicRepository
+import edu.uw.ischool.mwoode.quizdroid.repository.TopicRepository
+
 
 class QuizApp : Application() {
     // Declare the topicRepository as a property
-    val topicRepository: TopicRepository by lazy { InMemoryTopicRepository() }
+    val topicRepository: TopicRepository by lazy { InMemoryTopicRepository(this) }
 
     // Singleton pattern
     companion object {
@@ -17,7 +20,9 @@ class QuizApp : Application() {
     }
 
     override fun onCreate() {
+
         super.onCreate()
+
         instance = this
     }
 }

@@ -1,4 +1,12 @@
 package edu.uw.ischool.mwoode.quizdroid.repository
+import android.content.Context
+import android.util.Log
+import com.google.gson.stream.JsonReader
+import java.io.InputStreamReader
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
+
 
 data class Quiz(
     val question: String,
@@ -19,7 +27,7 @@ interface TopicRepository {
 
 }
 
-class InMemoryTopicRepository : TopicRepository {
+class InMemoryTopicRepository(private val context: Context) : TopicRepository {
     private val topics: MutableList<Topic> = mutableListOf()
 
     init {
@@ -64,4 +72,61 @@ class InMemoryTopicRepository : TopicRepository {
         topics.add(topic)
         return topic
     }
+
+    private fun readJsonFile(context: Context, fileName: String): String {
+        try {
+            context.assets.open(fileName).use { inputStream ->
+                val reader = JsonReader(InputStreamReader(inputStream))
+                val jsonContent = StringBuilder()
+
+                reader.beginObject()
+                while (reader.hasNext()) {
+                    val name = reader.nextName()
+                    val value = reader.nextString()
+                    jsonContent.append("$name: $value\n")
+                }
+                reader.endObject()
+
+                return jsonContent.toString()
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "Error reading JSON file", e)
+        }
+
+        return ""
+    }
 }
+/*
+
+fun readJsonFile(context: Context, filePath: String): String {
+    val file: File = File(filePath)
+    val fileReader = FileReader(file)
+    val bufferedReader = BufferedReader(fileReader)
+    val stringBuilder = java.lang.StringBuilder()
+    var line = bufferedReader.readLine()
+    while (line != null) {
+        stringBuilder.append(line).append("\n")
+        line = bufferedReader.readLine()
+    }
+    bufferedReader.close()
+// This responce will have Json Format String
+// This responce will have Json Format String
+    val response = stringBuilder.toString()
+
+    return response
+}
+
+private fun readJson(jsonReader: JsonReader): String {
+    val stringBuilder = StringBuilder()
+
+    // Read the JSON content
+    jsonReader.beginObject()
+    while (jsonReader.hasNext()) {
+        val name = jsonReader.nextName()
+        val value = jsonReader.nextString()
+        stringBuilder.append("$name: $value\n")
+    }
+    jsonReader.endObject()
+
+    return stringBuilder.toString()
+}*/
